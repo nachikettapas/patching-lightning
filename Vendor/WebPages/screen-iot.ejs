@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body >
+
+
+
+<div class="top-container">
+    <img src="../images/logo-top.png"
+         srcset="../images/logo-top@2x.png 2x,
+             ../images/logo-top@3x.png 3x"
+         class="Logo_top">
+</div>
+<div>
+    <div aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+    </div>
+</div>
+<div class="container">
+    <div class="container">
+
+
+        <div id="formContainerID" class="form-container z-depth-5">
+            <div class="row">
+                <br>
+            </div>
+            <div class="row" align="center">
+                <h3>Payments summary for IoT <%= publicKey.substring(0,5) + '...' + publicKey.substring(publicKey.length - 5, publicKey.length) %></h3>
+                <div style="margin-top: 16px; margin-bottom: 16px; font-size:16px;">
+                  <img src="../images/b-icon.png" id="B_icon_id"
+                       srcset="../images/b-icon@2x.png 2x,../images/b-icon@3x.png 3x"><%=totalPaid%> msat
+                  <img id="time_icon_id" src="../images/time-icon.png" srcset="../images/time-icon@2x.png 2x,../images/time-icon@3x.png 3x"><%=parseFloat(totalTimeToDownloadMs
+                            / 1000).toFixed(2) %> seconds</div>
+            </div>
+
+            <div class="row" align="center">
+              <table border="1" cellpadding="7" cellspacing="7">
+                <tr>
+                  <th>Piece #</th>
+                  <th>Distributor Node ID</th>
+                  <th>Paid (msat)</th>
+                </tr>
+                <% if(data.length){ 
+                  for(var i = 0;i < data.length;i++) { %>
+                <tr>
+                  <td><%=(i+1)%></td>
+                  <td class="tdbreak"><%=data[i].distributorNodeId%></td>
+                  <td><%=data[i].pricePerPiece%></td>
+                </tr>
+                <% }
+                }else{ %>
+                <tr>
+                  <td colspan="3">No user</td>
+                </tr>
+              <% } %>
+              </table>
+            </div>
+        </div>
+    </div>
+    <!--Import jQuery before materialize.js-->
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "vendorPort": "8080",
+  "publicKey": "0211649bc700f135311b0647b255ea14b07294d63abc29c0a4cb43a43ebb74ca91",
+  "sk": "6eb3b94a23e5889e787a24a6e4f600bf642bb0ff6905467721a7ea63cfabea90",
+  "iotPublicKeys": [
+    "02effb7ad8c5ac63483f6105471248eecf3174cec71962ce8c7746a72a20998520"
+  ]
+}

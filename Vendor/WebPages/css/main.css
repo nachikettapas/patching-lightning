@@ -1,0 +1,439 @@
+
+body {
+    xbackground-color: #000;
+    font-family: 'Montserrat', sans-serif;
+
+}
+html,
+body {
+    height: 100%;
+    background-image: url("../images/imageBackground.png");
+
+}
+
+table {
+    width: 900px;
+    text-align:center;
+    color:#000;
+    font-size:16px;
+}
+
+.tdbreak {
+    word-break: break-all
+}
+.logo-img {
+    margin-left: 20px;
+    margin-top: 8px;
+}
+
+.top-container {
+    width: 100%;
+    height: 68px; /*40px;*/
+    margin-left: auto;
+    margin-right: auto;
+    /*margin-top:90px;
+    margin-bottom: 30px;*/
+    xpadding: 30px;
+    background-color: #f5a623;
+    xposition: relative;
+    xbox-shadow: 0 16px 24px 2px rgba(0,0,0,0.14), 0 20px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.3);
+    xposition: absolute;
+
+}
+
+.left-upper-container {
+    width: 100%;
+    background-color: #e5e5e5;
+
+
+
+}
+
+.left-lower-container {
+    width: 100%;
+    background-color: #f0f0f0;
+
+
+
+}
+
+.updating-status-txt{
+    margin-top: 7%;
+    width: 100%;
+    alignment: center;
+    font-family: Montserrat;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.6px;
+    text-align: center;
+    color: #000000;
+    position: relative;
+}
+
+.icons-txt{
+    font-family: Montserrat;
+    font-size: 14px;
+    font-weight: normal!important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.4px;
+    text-align: center;
+    color: #000000;
+}
+
+.updating-status-line{
+    width: 70%;
+    height: 2px;
+    border: solid 1px #4a4a4a;
+    background-color: #d8d8d8;
+    margin-left: 13.5%;
+    position: relative;
+    margin-top: 3%;
+    margin-bottom: 1.5%;
+}
+
+.four-icons-div{
+    width: 70%;
+    margin-left: 13.5%;
+    position: relative;
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+
+.four-icons-text-div{
+    width: 70%;
+    margin-left: 13.5%;
+    position: relative;
+    margin-top: 3%;
+    margin-bottom: 3%!important;
+}
+
+.B_icon {
+    width: 15.9px;
+    height: 28px;
+    object-fit: contain;
+}
+#B_icon_id {
+    width: 50px;
+    height: 40px;
+    padding:5px;
+    object-fit: contain;
+}
+
+.D_icon {
+    width: 14.3px;
+    height: 28px;
+    object-fit: contain;
+
+}
+
+.time_icon {
+    width: 25.9px;
+    height: 25.9px;
+    object-fit: contain;
+
+}
+
+#time_icon_id {
+    width: 50px;
+    height: 36px;
+    padding:5px;
+    object-fit: contain;
+
+}
+
+.distribut_icon {
+    width: 28px;
+    height: 27px;
+    object-fit: contain;
+
+}
+
+.searching_icon {
+    width: 241px;
+    height: 235px;
+    object-fit: contain;
+}
+
+.Oval-yellow-icon {
+    width: 16px;
+    height: 16px;
+    border: solid 2px #000000;
+    background-color: #f8e71c;
+}
+
+.Oval-grey-icon {
+    width: 16px;
+    height: 16px;
+    border: solid 2px #000000;
+    background-color: #d8d8d8;
+}
+
+.Oval-orange-icon {
+    width: 16px;
+    height: 16px;
+    border: solid 2px #000000;
+    background-color: #f5a623;
+}
+
+
+.Logo_top {
+    width: 20%; /*264px;*/
+    height: 54%; /*37px;*/
+    object-fit: contain;
+    margin-left: 2%;
+    margin-top: 1%;
+}
+
+.form-container {
+    width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+    /*margin-top:90px;
+    margin-bottom: 30px;*/
+    padding: 30px;
+    xbackground-color: #fff;
+    position: relative;
+    xbox-shadow: 0 16px 24px 2px rgba(0,0,0,0.14), 0 20px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.3);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.xmap-form-container {
+    xwidth: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    /*margin-top:90px;
+    margin-bottom: 30px;*/
+    padding: 30px;
+    xbackground-color: #fff;
+    position: relative;
+    xbox-shadow: 0 16px 24px 2px rgba(0,0,0,0.14), 0 20px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.3);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.form-container .row {
+    margin-bottom: 0;
+}
+
+
+/* label color */
+.input-field label {
+    color: #9c9c9c;
+}
+/* label focus color */
+.input-field input[type=text]:focus + label {
+    color: #9c9c9c;
+}
+/* label underline focus color */
+.input-field input[type=text]:focus {
+    border-bottom: 1px solid #9c9c9c;
+    box-shadow: 0 1px 0 0 #9c9c9c;
+}
+/* valid color */
+.input-field input[type=text].valid {
+    border-bottom: 1px solid #9c9c9c;
+    box-shadow: 0 1px 0 0 #9c9c9c;
+}
+/* invalid color */
+.input-field input[type=text].invalid {
+    border-bottom: 1px solid #9c9c9c;
+    box-shadow: 0 1px 0 0 #9c9c9c;
+}
+/* icon prefix focus color */
+.input-field .prefix.active {
+    color: #9c9c9c;
+}
+input:not([type]):focus:not([readonly]),
+input[type=text]:focus:not([readonly]),
+input[type=password]:focus:not([readonly]),
+input[type=email]:focus:not([readonly]),
+input[type=url]:focus:not([readonly]),
+input[type=time]:focus:not([readonly]),
+input[type=date]:focus:not([readonly]),
+input[type=datetime]:focus:not([readonly]),
+input[type=datetime-local]:focus:not([readonly]),
+input[type=tel]:focus:not([readonly]),
+input[type=number]:focus:not([readonly]),
+input[type=search]:focus:not([readonly]),
+textarea.materialize-textarea:focus:not([readonly]) {
+    border-bottom: 1px solid #009ddc;
+    box-shadow: 0 1px 0 0 #009ddc;
+}
+input:not([type]):focus:not([readonly])+label,
+input[type=text]:focus:not([readonly])+label,
+input[type=password]:focus:not([readonly])+label,
+input[type=email]:focus:not([readonly])+label,
+input[type=url]:focus:not([readonly])+label,
+input[type=time]:focus:not([readonly])+label,
+input[type=date]:focus:not([readonly])+label,
+input[type=datetime]:focus:not([readonly])+label,
+input[type=datetime-local]:focus:not([readonly])+label,
+input[type=tel]:focus:not([readonly])+label,
+input[type=number]:focus:not([readonly])+label,
+input[type=search]:focus:not([readonly])+label,
+textarea.materialize-textarea:focus:not([readonly])+label {
+    color: #009ddc;
+}
+.form-container .btn {
+    background-color: #1972b6;
+    color: white;
+}
+
+
+#upload_form {
+    width: 300px;
+    margin-left: 25%;
+}
+
+.bootstrap-filestyle.input-group {
+    width: 300px;
+    position: relative;
+}
+
+.choose-file-btn.btn-secondary {
+    width: 120px;
+    height: 42px;
+    border-radius: 21px;
+    background-color: #f8e71c;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.9px;
+    text-align: center;
+    color: #4a4a4a;
+}
+
+.input-group-btn:last-child>.btn.choose-file-btn, .input-group-btn:last-child>.btn-group {
+    border-radius: 21px;
+}
+
+.group-span-filestyle.input-group-btn {
+    position: absolute;
+    left: 242px;
+    width: 120px;
+}
+
+.submitbtn {
+    line-height: 48px;
+    display: block;
+    height: 48px;
+    width: 100%;
+}
+.form-container h3 {
+    font-size: 30px;
+    font-family: 'Montserrat', sans-serif;
+    xletter-spacing: 0.1em;
+    margin: 0;
+    padding: 0;
+    font-weight: 600;
+    xtext-transform: uppercase;
+    xposition: absolute;
+    xtop: -46px;
+}
+
+.map-form-container h3 {
+    font-size: 30px;
+    font-family: 'Montserrat', sans-serif;
+    xletter-spacing: 0.1em;
+    margin: 0;
+    padding: 0;
+    color: rgba(54, 54, 54, 0.52);
+    font-weight: 600;
+    xtext-transform: uppercase;
+    xposition: absolute;
+    xtop: -46px;
+}
+
+.udpate-status-title {
+    font-family: Montserrat;
+    font-size: 30px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 1px;
+    text-align: center;
+    color: #000000;
+}
+
+td, th {
+    padding-right: 8px;
+}
+table tr th{
+    text-align:center;
+}
+.col-md-5{
+    width:50%;
+}
+.col-md-7{
+    width:50%;
+}
+
+@media  all and (max-width: 640px) {
+    .form-container {
+        position: static;
+        -webkit-transform: translate(0, 0);
+        -ms-transform: translate(0, 0);
+        -o-transform: translate(0, 0);
+        transform: translate(0, 0);
+        width: 100%;
+        margin-top: 70px;
+        margin-bottom: 20px;
+    }
+    .form-container h3 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 24px;
+        top: -26px;
+    }
+
+    .map-form-container {
+        position: static;
+        -webkit-transform: translate(0, 0);
+        -ms-transform: translate(0, 0);
+        -o-transform: translate(0, 0);
+        transform: translate(0, 0);
+        width: 100%;
+        height: 100%;
+        margin-top: 27%;
+        background: red;
+
+    }
+
+    #IDofCreatedMap {
+        background: red;
+
+
+    }
+}
+#xcontainerID{
+    height:100%
+}
+#col-md-5-ID, #col-md-7-ID{
+    width:49.5%;
+}
+#formContainerID{
+    top:35%;
+    width:900px;
+    padding-top: 150px;
+}

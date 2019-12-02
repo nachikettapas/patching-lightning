@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link href="css/KBmapmarkers.css" rel="stylesheet">
+
+
+    <script src="JS/jquery-3.3.1.js"></script>
+    <script src="JS/jquery-3.3.1.min.js"></script>
+    <script src="JS/bootstrap.min.js"></script>
+    <script type="text/javascript" src="JS/KBmapmarkers.js"></script>
+    <script type="text/javascript" src="JS/KBmapmarkersCords.js"></script>
+    <script src="JS/mapMarkersJson.js"></script>
+    <script src="JS/socket.io.js"></script>
+    <script src="JS/screen2.js"></script>
+
+
+</head>
+<body >
+<script>
+
+
+
+
+</script>
+
+<div class="top-container">
+    <img src="images/logo-top.png"
+         srcset="images/logo-top@2x.png 2x,
+             images/logo-top@3x.png 3x"
+         class="Logo_top">
+</div>
+<!--<div  class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%" >
+    </div>
+</div>-->
+
+
+<div id="xcontainerID" class="xcontainer" dir="ltr">
+
+    <div class="row">
+        <div id="col-md-5-ID" class="col-md-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="left-upper-container">
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="updating-status-txt">
+
+
+                                <label  id="updateStatusLabel">UPDATING</label>
+                                <label  id="updateStatusLabelAmount" >1/25</label>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+
+                           <div class="updating-status-line">
+
+                           </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="four-icons-div">
+                            <div class="col-md-3" align="center">
+                                <img src="images/b-icon.png"
+                                     srcset="images/b-icon@2x.png 2x,
+                                        images/b-icon@3x.png 3x"
+                                     class="B_icon">
+                            </div>
+                            <div class="col-md-3" align="center">
+                                <img src="images/d-icon.png"
+                                     srcset="images/d-icon@2x.png 2x,
+             images/d-icon@3x.png 3x"
+                                     class="D_icon">
+                            </div>
+                            <div class="col-md-3" align="center">
+                                <img src="images/time-icon.png"
+                                     srcset="images/time-icon@2x.png 2x,
+             images/time-icon@3x.png 3x"
+                                     class="time_icon">
+                            </div>
+                            <div class="col-md-3" align="center">
+                                <img src="images/distribut-icon.png"
+                                     srcset="images/distribut-icon@2x.png 2x,
+             images/distribut-icon@3x.png 3x"
+                                     class="distribut_icon">
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="four-icons-text-div icons-txt">
+                            <div class="col-md-3" align="center">
+                                <label  id="b_icon_txt" ></label>
+
+                            </div>
+                            <div class="col-md-3" align="center">
+                                <label  id="d_icon_txt" ></label>
+
+                            </div>
+                            <div class="col-md-3" align="center">
+                                <label  id="time_icon_txt" ></label>
+
+                            </div>
+                            <div class="col-md-3" align="center">
+                                <label  id="ditribuit_icon_txt" >5 distributors</label>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row" style="margin-top: 3%;">
+                        <div class="col-md-12">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="left-lower-container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div align="center" id="start_state_div" class="row" style="margin-top: 10%;margin-bottom:40%;">
+                                <img src="images/placeholder.png"
+                                     srcset="images/placeholder@2x.png 2x, images/placeholder@3x.png 3x"
+                                     class="placeholder">
+                            </div>
+                            <div id="IOT_state_div" class="row" style="margin-top: 5%;margin-bottom: 20%;">
+                                <table class="table" id="table1">
+                                    <thead>
+                                        <tr >
+                                            <th class="text-center icons-txt">
+                                                IoT public key
+                                            </th>
+                                            <th class="text-center icons-txt">
+                                                paid(msat)
+                                            </th>
+                                            <th class="text-center icons-txt">
+                                                Time(sec)
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr id="row0">
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="distributions_state_div" class="row">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        </div>
+        <div id="col-md-7-ID" class="col-md-7 " style="margin-top: 5%;">
+            <div class="map-form-container">
+                <!--<div class="row" align="center">
+                    <h3>
+                        <label  id="updateStatusLabel">Updating file </label>
+                        <label  id="updateStatusLabelAmount" style="color: #5bc0de">1/25</label>
+                    </h3>
+                </div>-->
+                <div>
+                    <br>
+                    <br>
+                </div>
+
+                <section  class="KBmap" id="IDofCreatedMap" ></section>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
+
+
+</body>
+
+
+</html>

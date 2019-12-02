@@ -1,0 +1,10 @@
+{
+  "bitcoinNetwork": "testnet",
+  "rpcUserName": "server",
+  "rpcPassword": "bgutestnet",
+  "host": "62.219.55.21",
+  "lightningHubNodeID": "0336cc676262804560a016cda8b1419859c866f6b71da934d8550c9032d8d77be9",
+  "lightningPort": "9735",
+  "vendorIp": "10.0.0.221",
+  "vendorPort": "8080"
+}
