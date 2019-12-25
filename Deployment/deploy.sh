@@ -140,7 +140,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
            elif [ "$VENDOR" = "1" ]; then
                echo "Start lightning channel setup"
                ssh -n $target "node /home/$user/patching-lightning/Deployment/createConfig.js --type=Vendor --vendorPort=8080"
-               ssh -n $target "~/lightning/lightningd/lightningd --network=testnet --log-level=debug --daemon && sleep 5 && pkill lightning && node /home/$user/patching-lightning/Utils/generateAddress.js --hsmSecretPath=/home/$user/.lightning/hsm_secret --configFilePath=/home/$user/patching-lightning/Vendor/Vendor_config.json && sudo rm -r ~/.lightning/ && ~/lightning/lightningd/lightningd --network=testnet --log-level=debug --daemon >> runLog.log 2>&1 &"
+               ssh -n $target "lightningd --network=regtest --log-level=debug --daemon && sleep 5 && pkill lightning && node /home/$user/patching-lightning/Utils/generateAddress.js --hsmSecretPath=/home/nachiket/.lightning/hsm_secret --configFilePath=/home/nachiket/patching-lightning/Vendor/Vendor_config.json && sudo rm -r ~/.lightning/ && lightningd --network=regtest --log-level=debug --daemon >> runLog.log 2>&1 &"
            fi
 
            echo "End of installation $ip"

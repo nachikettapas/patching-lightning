@@ -35,7 +35,7 @@ This will install bitcoind, create a directory inside home dir, named .bitcoin. 
 * Make sure the patching-lightning project location is ~/patching-lightning and run :
 
     ```sh
-    $ cd ~/patching-lightning/ && npm install && cd node_modules/webtorrent/ && sudo rm -r node_modules/ && npm install && cd /home/user/ && export LC_ALL=C && sudo apt install -y python3-pip && cd ~/patching-lightning/Utils/AddressGeneration/ && sudo pip3 install -r requirements.txt
+    $ cd ~/patching-lightning/ && npm install && cd node_modules/webtorrent/ && sudo rm -r node_modules/ && npm install && cd ~ && export LC_ALL=C && sudo apt install -y python3-pip && cd ~/patching-lightning/Utils/AddressGeneration/ && sudo pip3 install -r requirements.txt
     ```
 * Make sure that the bitcoin wallet holds at least 1 testnet BTC, you can use this faucet in order to get funds :
    ```sh
