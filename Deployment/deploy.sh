@@ -14,8 +14,8 @@
 # Then copy the public key to the target server
 # ssh-copy-id user@server (e.g. user@10.0.1.2)
 
-USER="pi"
-SERVERUSER="alexey"
+USER="deployment"
+SERVERUSER="nachiket"
 BRANCH="develop"
 LIGHTNINGDIRECTORY="~/patching-lightning/"
 CONFIG=""
@@ -111,7 +111,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
            echo "Clone lightning from repository"
            ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure --enable-developer && make && make install"
            echo "Start clone patching-lightning"
-           ssh -n $target "git clone -b $BRANCH https://alexey:aY320988@git.tlabs.bgu.ac.il/IoT/patching-lightning.git && cd patching-lightning/ && git config user.name alexey && git config user.password aY320988"
+           ssh -n $target "git clone https://github.com/nachikettapas/patching-lightning.git"
            echo "Start install packages"
            ssh -n $target "cd ~/patching-lightning/ && npm install && cd node_modules/webtorrent/ && sudo rm -r node_modules/ && npm install && cd /home/$user/ && export LC_ALL=C && sudo apt install -y python3-pip && cd ~/patching-lightning/Utils/AddressGeneration/ && sudo pip3 install -r requirements.txt"
            echo "start copy bitcoind config file"
@@ -119,14 +119,14 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
            #get lightning configuration
            if [ "$IOT" = "1" ]; then
                echo "Create IoT config and create new lightning wallet"
-               ssh -n $targetVendor "while true ; do if pgrep -x lightningd > /dev/null; then pkill lightning && echo \"lightning process is killed\" && break; else echo \"wait to lightning process\" && sleep 2 ; fi; done && chmod 777 ~/.lightning/hsm_secret && cd ~/.lightning && ssh -n $target \"if [ -e \"/home/$user/.lightning\" ]; then sudo rm -r /home/$user/.lightning ; fi && mkdir .lightning\" && scp hsm_secret $target:~/.lightning/ && pwd && node /home/$vendorUser/patching-lightning/Vendor/generateIoTConfig.js --hsmSecretPath=/home/$vendorUser/.lightning/hsm_secret && scp ~/patching-lightning/Vendor/IoT_config.json $target:~/patching-lightning/IoT/ &&  sudo rm -r ~/.lightning/ && ~/lightning/lightningd/lightningd --network=testnet --log-level=debug --daemon"
+               ssh -n $targetVendor "while true ; do if pgrep -x lightningd > /dev/null; then pkill lightning && echo \"lightning process is killed\" && break; else echo \"wait to lightning process\" && sleep 2 ; fi; done && chmod 777 ~/.lightning/testnet/hsm_secret && cd ~/.lightning && ssh -n $target \"if [ -e \"/home/$user/.lightning\" ]; then sudo rm -r /home/$user/.lightning ; fi && mkdir .lightning\" && scp ~/.lightning/testnet/hsm_secret $target:~/.lightning/ && pwd && node /home/$vendorUser/patching-lightning/Vendor/generateIoTConfig.js --hsmSecretPath=/home/$vendorUser/.lightning/testnet/hsm_secret && scp ~/patching-lightning/Vendor/IoT_config.json $target:~/patching-lightning/IoT/ &&  sudo rm -r ~/.lightning/ && lightningd --network=testnet --log-level=debug --daemon"
                echo "Start lightning"
-               ssh -n $target "cd lightning && ~/lightning/lightningd/lightningd --network=testnet --log-level=debug --daemon >> runLog.log 2>&1 &"
+               ssh -n $target "lightningd --network=testnet --log-level=debug --daemon >> runLog.log 2>&1 &"
                echo "Start lightning channel setup"
                ssh -n $target "cd ~/patching-lightning/Deployment/ ; node Setup.js --type=iot >> setupLog.log 2>&1 &"
            elif [ "$DISTRIBUTOR" = "1" ]; then
                now=$(date)
-               ssh -n $target "cd lightning && ~/lightning/lightningd/lightningd --network=testnet --log-level=debug --daemon >> runLog.log 2>&1 &"
+               ssh -n $target "lightningd --network=testnet --log-level=debug --daemon >> runLog.log 2>&1 &"
                vendorIp_=$(jq '.vendorIp' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
                vendorPort=$(jq '.vendorPort' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
                lightningHubNodeId=$(jq '.lightningHubNodeID' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
@@ -135,13 +135,13 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
                echo "vendorIp=$vendorIp_, vendorPort=$vendorPort, lightningHubNodeId=$lightningHubNodeId, vendorPubKey=$vendorPubKey"
                ssh -n $target "node /home/$user/patching-lightning/Deployment/createConfig.js --type=Distributor --vendorIp=$vendorIp_ --vendorPort=$vendorPort --vendorPubKey=$vendorPubKey --lightningHubNodeId=$lightningHubNodeId"
                invoice=$(~/lightning/cli/lightning-cli invoice 5000000 "$target$now" hello 28800|\jq '.bolt11')
-               ssh -n $target "node /home/$user/patching-lightning/Utils/generateAddress.js --hsmSecretPath=/home/$user/.lightning/hsm_secret --configFilePath=/home/$user/patching-lightning/Distributor/Distributor_config.json"
+               ssh -n $target "node /home/$user/patching-lightning/Utils/generateAddress.js --hsmSecretPath=/home/$user/.lightning/testnet/hsm_secret --configFilePath=/home/$user/patching-lightning/Distributor/Distributor_config.json"
                echo "Start lightning channel setup"
                ssh -n $target "cd ~/patching-lightning/Deployment/ ; node Setup.js --type=distributor --invoice=$invoice >> setupLog.log 2>&1 &"
            elif [ "$VENDOR" = "1" ]; then
                echo "Start lightning channel setup"
                ssh -n $target "node /home/$user/patching-lightning/Deployment/createConfig.js --type=Vendor --vendorPort=8080"
-               ssh -n $target "~/lightning/lightningd/lightningd --network=testnet --log-level=debug --daemon && sleep 5 && pkill lightning && node /home/$user/patching-lightning/Utils/generateAddress.js --hsmSecretPath=/home/$user/.lightning/hsm_secret --configFilePath=/home/$user/patching-lightning/Vendor/Vendor_config.json && sudo rm -r ~/.lightning/ && ~/lightning/lightningd/lightningd --network=testnet --log-level=debug --daemon >> runLog.log 2>&1 &"
+               ssh -n $target "lightningd --network=testnet --log-level=debug --daemon && sleep 5 && pkill lightning && node /home/$user/patching-lightning/Utils/generateAddress.js --hsmSecretPath=/home/$user/.lightning/testnet/hsm_secret --configFilePath=/home/$user/patching-lightning/Vendor/Vendor_config.json && sudo rm -r ~/.lightning/ && lightningd --network=testnet --log-level=debug --daemon >> runLog.log 2>&1 &"
            fi
 
            echo "End of installation $ip"
