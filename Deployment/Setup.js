@@ -10,6 +10,7 @@ const rpcPassword = utils.getJsonAttribute(configFilePath, 'rpcPassword')
 const lightningHost = utils.getJsonAttribute(configFilePath, 'host')
 const lightningHubNodeID = utils.getJsonAttribute(configFilePath, 'lightningHubNodeID')
 const lightningPort = utils.getJsonAttribute(configFilePath, 'lightningPort')
+/* This change is done by Nachiket Tapas */
 const clientLightning = new LightningClient(homedir + '/.lightning/' + bitcoinNetwork)
 const clientBitcoin = new bitcoinClient({ network: bitcoinNetwork, username: rpcUserName, password: rpcPassword, host: lightningHost });
 
