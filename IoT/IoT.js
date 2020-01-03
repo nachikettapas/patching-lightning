@@ -1,5 +1,7 @@
 const WebTorrent = require('webtorrent')
 const utils = require('../Utils/Utils')
+const deploymentFilePath = '../Deployment/Deployment_config.json'
+const bitcoinNetwork = utils.getJsonAttribute(deploymentFilePath, 'bitcoinNetwork')
 const IoTLightningClient = require('../Utils/LightningClient')
 const createDebug = require('debug')
 createDebug.formatters.h = (v) => {
@@ -22,7 +24,7 @@ function IoT (configFilePath) {
   let self = this
   this.configFilePath = configFilePath
   this.webtorrentClient = new WebTorrent()
-  this.lightningClient = new IoTLightningClient(homedir + '/.lightning')
+  this.lightningClient = new IoTLightningClient(homedir + '/.lightning/' + bitcoinNetwork)
   this.vendorIp = utils.getJsonAttribute(configFilePath, 'vendorIp')
   this.vendorPort = utils.getJsonAttribute(configFilePath, 'vendorPort')
   this.socketIOClient = require('socket.io-client')('http://' + this.vendorIp + ':' + this.vendorPort)

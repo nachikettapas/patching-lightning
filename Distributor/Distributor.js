@@ -1,5 +1,7 @@
 const WebTorrent = require('webtorrent')
 const utils = require('../Utils/Utils')
+const deploymentFilePath = '../Deployment/Deployment_config.json'
+const bitcoinNetwork = utils.getJsonAttribute(deploymentFilePath, 'bitcoinNetwork')
 const homedir = require('os').homedir()
 const DistributorLightningClient = require('../Utils/LightningClient')
 const createDebug = require('debug')
@@ -19,7 +21,8 @@ function Distributor (configFilePath) {
   let self = this
   this.configFilePath = configFilePath
   this.webtorrentClient = new WebTorrent()
-  this.lightningClient = new DistributorLightningClient(homedir + '/.lightning')
+  
+  this.lightningClient = new DistributorLightningClient(homedir + '/.lightning/' + bitcoinNetwork)
   this.vendorIp = utils.getJsonAttribute(configFilePath, 'vendorIp')
   this.vendorPort = utils.getJsonAttribute(configFilePath, 'vendorPort')
   this.socketIOClient = require('socket.io-client')('http://' + this.vendorIp + ':' + this.vendorPort)

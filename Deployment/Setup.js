@@ -4,13 +4,13 @@ const utils = require('../Utils/Utils')
 const bitcoinClient = require('bitcoin-core')
 const commandLineArgs = require('command-line-args')
 const homedir = require('os').homedir()
-const clientLightning = new LightningClient(homedir + '/.lightning/testnet')
 const bitcoinNetwork = utils.getJsonAttribute(configFilePath, 'bitcoinNetwork')
 const rpcUserName = utils.getJsonAttribute(configFilePath, 'rpcUserName')
 const rpcPassword = utils.getJsonAttribute(configFilePath, 'rpcPassword')
 const lightningHost = utils.getJsonAttribute(configFilePath, 'host')
 const lightningHubNodeID = utils.getJsonAttribute(configFilePath, 'lightningHubNodeID')
 const lightningPort = utils.getJsonAttribute(configFilePath, 'lightningPort')
+const clientLightning = new LightningClient(homedir + '/.lightning/' + bitcoinNetwork)
 const clientBitcoin = new bitcoinClient({ network: bitcoinNetwork, username: rpcUserName, password: rpcPassword, host: lightningHost });
 
 /**
