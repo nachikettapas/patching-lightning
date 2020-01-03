@@ -117,7 +117,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
            echo "start copy bitcoind config file"
            scp -r $bitcoinSource $bitcoinTarget
 		   deploymentSource="/home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json"
-		   deploymentTarget="/home/$user/patching-lightning/Deployment/Deployment_config.json"
+		   deploymentTarget="$user@$ip:/home/$user/patching-lightning/Deployment/"
 		   scp -r $deploymentSource $deploymentTarget
            #get lightning configuration
            if [ "$IOT" = "1" ]; then
