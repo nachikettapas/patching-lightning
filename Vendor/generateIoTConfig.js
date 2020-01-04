@@ -33,12 +33,15 @@ async function generateIoTConfig () {
     let rpcUserName = utils.getJsonAttribute(homedir+'/patching-lightning/Deployment/Deployment_config.json', 'rpcUserName')
     let rpcPassword = utils.getJsonAttribute(homedir+'/patching-lightning/Deployment/Deployment_config.json', 'rpcPassword')
     let host = utils.getJsonAttribute(homedir+'/patching-lightning/Deployment/Deployment_config.json', 'host')
-    const bitcoinClient = new bitcoinCore({
+    let port = utils.getJsonAttribute(homedir+'/patching-lightning/Deployment/Deployment_config.json', 'rpcport')
+	const bitcoinClient = new bitcoinCore({
       network: bitcoinNetwork,
       username: rpcUserName,
       password: rpcPassword,
-      host: host
+      host: host,
+	  port: rpcport
     })
+	
     const testnet = bitcoin.networks.testnet
     const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: testnet })
     const address = bitcoin.payments.p2sh({ redeem: p2wpkh, network: testnet }).address
