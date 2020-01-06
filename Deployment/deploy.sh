@@ -15,7 +15,7 @@
 # ssh-copy-id user@server (e.g. user@10.0.1.2)
 
 USER="deployment"
-SERVERUSER="nachiket"
+SERVERUSER="deployment"
 BRANCH="develop"
 LIGHTNINGDIRECTORY="~/patching-lightning/"
 CONFIG=""
@@ -121,18 +121,46 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 		   deploymentSource="/home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json"
 		   deploymentTarget="$user@$ip:/home/$user/patching-lightning/Deployment/"
 		   scp -r $deploymentSource $deploymentTarget
+		   
+		   # Change done by Nachiket Tapas
+		   #code for regtest only
+		   if [ "$bitcoinNetwork" = "regtest" ]; then
+		       lightningHubNodeId=$(jq '.lightningHubNodeID' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
+			   host=$(jq '.host' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
+			   lightningPort=$(jq '.lightningPort' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
+		   fi
+		   # ------------------------------
+		   
            #get lightning configuration
            if [ "$IOT" = "1" ]; then
                echo "Create IoT config and create new lightning wallet"
                ssh -n $targetVendor "while true ; do if pgrep -x lightningd > /dev/null; then pkill lightning && echo \"lightning process is killed\" && break; else echo \"wait to lightning process\" && sleep 2 ; fi; done && chmod 777 ~/.lightning/$bitcoinNetwork/hsm_secret && cd ~/.lightning && ssh -n $target \"if [ -e \"/home/$user/.lightning\" ]; then sudo rm -r /home/$user/.lightning ; fi && mkdir .lightning\" && scp ~/.lightning/$bitcoinNetwork/hsm_secret $target:~/.lightning/ && pwd && node /home/$vendorUser/patching-lightning/Vendor/generateIoTConfig.js --hsmSecretPath=/home/$vendorUser/.lightning/$bitcoinNetwork/hsm_secret && scp ~/patching-lightning/Vendor/IoT_config.json $target:~/patching-lightning/IoT/ &&  sudo rm -r ~/.lightning/"
 			   ssh -n $targetVendor "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
+			   # Change done by Nachiket Tapas
+			   #code for regtest only
+		       if [ "$bitcoinNetwork" = "regtest" ]; then
+			       ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+			   fi   
+			   # ------------------------------
                echo "Start lightning"
                ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
+			   # Change done by Nachiket Tapas
+		       #code for regtest only
+		       if [ "$bitcoinNetwork" = "regtest" ]; then
+			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+			   fi
+			   # ------------------------------
                echo "Start lightning channel setup"
                ssh -n $target "cd ~/patching-lightning/Deployment/ ; node Setup.js --type=iot >> setupLog.log 2>&1 &"
            elif [ "$DISTRIBUTOR" = "1" ]; then
                now=$(date)
                ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
+			   # Change done by Nachiket Tapas
+		       #code for regtest only
+		       if [ "$bitcoinNetwork" = "regtest" ]; then
+			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+			   fi
+			   # ------------------------------
                vendorIp_=$(jq '.vendorIp' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
                vendorPort=$(jq '.vendorPort' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
                lightningHubNodeId=$(jq '.lightningHubNodeID' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
@@ -148,8 +176,20 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
                echo "Start lightning channel setup"
                ssh -n $target "node /home/$user/patching-lightning/Deployment/createConfig.js --type=Vendor --vendorPort=8080"
                ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
+			   # Change done by Nachiket Tapas
+		       #code for regtest only
+		       if [ "$bitcoinNetwork" = "regtest" ]; then
+			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+			   fi
+			   # ------------------------------
 			   ssh -n $target "sleep 5 && pkill lightning && node /home/$user/patching-lightning/Utils/generateAddress.js --hsmSecretPath=/home/$user/.lightning/$bitcoinNetwork/hsm_secret --configFilePath=/home/$user/patching-lightning/Vendor/Vendor_config.json && sudo rm -r ~/.lightning/" 
 			   ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
+			   # Change done by Nachiket Tapas
+		       #code for regtest only
+		       if [ "$bitcoinNetwork" = "regtest" ]; then
+			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+			   fi
+			   # ------------------------------
            fi
 
            echo "End of installation $ip"
