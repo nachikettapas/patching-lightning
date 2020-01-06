@@ -139,7 +139,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 			   # Change done by Nachiket Tapas
 			   #code for regtest only
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
-				   sleep 5
+				   sleep 30
 			       ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 			   fi   
 			   # ------------------------------
@@ -148,7 +148,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 			   # Change done by Nachiket Tapas
 		       #code for regtest only
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
-				   sleep 5
+				   sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 			   fi
 			   # ------------------------------
@@ -160,7 +160,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 			   # Change done by Nachiket Tapas
 		       #code for regtest only
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
-			       sleep 5
+			       sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 			   fi
 			   # ------------------------------
@@ -182,7 +182,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 			   # Change done by Nachiket Tapas
 		       #code for regtest only
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
-			       sleep 5
+			       sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 			   fi
 			   # ------------------------------
@@ -191,7 +191,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 			   # Change done by Nachiket Tapas
 		       #code for regtest only
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
-			       sleep 5
+			       sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 			   fi
 			   # ------------------------------
