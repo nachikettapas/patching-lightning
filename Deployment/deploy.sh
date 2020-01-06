@@ -42,7 +42,7 @@ CLI=""
 function init(){
   ip="$(cut -d'|' -f1 <<<"$1")"
   user="$(cut -d'|' -f2 <<<"$1")"
-  bitcoinNetwork=$(jq '.bitcoinNetwork' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
+  bitcoinNetwork=$(jq -r '.bitcoinNetwork' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
   echo IP: $ip, user: $user
 }
 
@@ -139,6 +139,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 			   # Change done by Nachiket Tapas
 			   #code for regtest only
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
+				   sleep 5
 			       ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 			   fi   
 			   # ------------------------------
@@ -147,6 +148,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 			   # Change done by Nachiket Tapas
 		       #code for regtest only
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
+				   sleep 5
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 			   fi
 			   # ------------------------------
@@ -158,6 +160,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 			   # Change done by Nachiket Tapas
 		       #code for regtest only
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
+			       sleep 5
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 			   fi
 			   # ------------------------------
@@ -179,6 +182,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 			   # Change done by Nachiket Tapas
 		       #code for regtest only
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
+			       sleep 5
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 			   fi
 			   # ------------------------------
@@ -187,6 +191,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 			   # Change done by Nachiket Tapas
 		       #code for regtest only
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
+			       sleep 5
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 			   fi
 			   # ------------------------------
