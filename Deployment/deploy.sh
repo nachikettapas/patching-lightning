@@ -141,6 +141,8 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 				   sleep 30
 			       ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+				   sleep 30
+				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
 			   fi   
 			   # ------------------------------
                echo "Start lightning"
@@ -150,6 +152,8 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 				   sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+				   sleep 30
+				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
 			   fi
 			   # ------------------------------
                echo "Start lightning channel setup"
@@ -162,6 +166,8 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 			       sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+				   sleep 30
+				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
 			   fi
 			   # ------------------------------
                vendorIp_=$(jq '.vendorIp' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
@@ -184,6 +190,8 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 			       sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+				   sleep 30
+				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
 			   fi
 			   # ------------------------------
 			   ssh -n $target "sleep 5 && pkill lightning && node /home/$user/patching-lightning/Utils/generateAddress.js --hsmSecretPath=/home/$user/.lightning/$bitcoinNetwork/hsm_secret --configFilePath=/home/$user/patching-lightning/Vendor/Vendor_config.json && sudo rm -r ~/.lightning/" 
@@ -193,6 +201,8 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 			       sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+				   sleep 30
+				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
 			   fi
 			   # ------------------------------
            fi
@@ -348,6 +358,8 @@ elif [ "$RUN" = "1" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 			       sleep 30
 				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+				   sleep 30
+				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
 			   fi
                ssh -n $target "cd /home/$user/patching-lightning/Distributor/ && sleep 2 && export DEBUG=bittorrent-extension,distributor,bittorrent-protocol,LightningClient; nohup node index.js > runDistLog.log 2>&1 &"
              done <"$CONF_DISTRIBUTOR"
@@ -365,6 +377,8 @@ elif [ "$RUN" = "1" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 			       sleep 30
 				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+				   sleep 30
+				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
 			   fi
                ssh -n $target "cd /home/$user/patching-lightning/IoT/ && sleep 2 && export DEBUG=bittorrent-extension,iot,bittorrent-protocol,LightningClient,lightning-client; nohup node index.js > runIotLog.log 2>&1 &"
 
@@ -395,6 +409,8 @@ elif [ "$RUN" = "1" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 			       sleep 30
 				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+				   sleep 30
+				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
 			   fi
                ssh -n $target "cd /home/$user/patching-lightning/Distributor/ && sleep 2 &&  export DEBUG=bittorrent-extension,distributor,bittorrent-protocol,LightningClient,webt ; nohup node index.js > runDistLog.log 2>&1 &"
              done <"$CONF_DISTRIBUTOR"
@@ -412,6 +428,8 @@ elif [ "$RUN" = "1" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 			       sleep 30
 				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+				   sleep 30
+				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
 			   fi
                ssh -n $target "cd /home/$user/patching-lightning/IoT/ && sleep 2 && export DEBUG=bittorrent-extension,iot,bittorrent-protocol,LightningClient ; nohup node index.js > runIotLog.log 2>&1 &"
              done <"$CONF_IOT"
