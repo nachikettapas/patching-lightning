@@ -345,6 +345,10 @@ elif [ "$RUN" = "1" ]; then
                ssh -n $target "pkill node"
                ssh -n $target "pkill lightning"
                ssh -n $target "if pgrep -x lightningd > /dev/null; then cd ~/patching-lightning/Distributor/ && pkill node ; else pkill node ; nohup ~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon > runLightningLog.log 2>&1 & fi"
+		       if [ "$bitcoinNetwork" = "regtest" ]; then
+			       sleep 30
+				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+			   fi
                ssh -n $target "cd /home/$user/patching-lightning/Distributor/ && sleep 2 && export DEBUG=bittorrent-extension,distributor,bittorrent-protocol,LightningClient; nohup node index.js > runDistLog.log 2>&1 &"
              done <"$CONF_DISTRIBUTOR"
 
@@ -358,6 +362,10 @@ elif [ "$RUN" = "1" ]; then
                ssh -n $target "pkill node"
                ssh -n $target "pkill lightning"
                ssh -n $target "if pgrep -x lightningd > /dev/null; then cd ~/patching-lightning/IoT/ && pkill node ; else nohup ~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon > runLightningLog.log 2>&1 & fi"
+		       if [ "$bitcoinNetwork" = "regtest" ]; then
+			       sleep 30
+				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+			   fi
                ssh -n $target "cd /home/$user/patching-lightning/IoT/ && sleep 2 && export DEBUG=bittorrent-extension,iot,bittorrent-protocol,LightningClient,lightning-client; nohup node index.js > runIotLog.log 2>&1 &"
 
               done <"$CONF_IOT"
@@ -384,6 +392,10 @@ elif [ "$RUN" = "1" ]; then
                ssh -n $target "pkill node"
                ssh -n $target "pkill lightning"
                ssh -n $target "if pgrep -x lightningd > /dev/null; then cd ~/patching-lightning/Distributor/ && pkill node ; else nohup ~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon > runLightningLog.log 2>&1 & fi"
+		       if [ "$bitcoinNetwork" = "regtest" ]; then
+			       sleep 30
+				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+			   fi
                ssh -n $target "cd /home/$user/patching-lightning/Distributor/ && sleep 2 &&  export DEBUG=bittorrent-extension,distributor,bittorrent-protocol,LightningClient,webt ; nohup node index.js > runDistLog.log 2>&1 &"
              done <"$CONF_DISTRIBUTOR"
 
@@ -397,6 +409,10 @@ elif [ "$RUN" = "1" ]; then
                ssh -n $target "pkill node"
                ssh -n $target "pkill lightning"
                ssh -n $target "if pgrep -x lightningd > /dev/null; then cd ~/patching-lightning/IoT/ && pkill node ; else nohup ~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon > runLightningLog.log 2>&1 & fi"
+		       if [ "$bitcoinNetwork" = "regtest" ]; then
+			       sleep 30
+				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
+			   fi
                ssh -n $target "cd /home/$user/patching-lightning/IoT/ && sleep 2 && export DEBUG=bittorrent-extension,iot,bittorrent-protocol,LightningClient ; nohup node index.js > runIotLog.log 2>&1 &"
              done <"$CONF_IOT"
     fi
