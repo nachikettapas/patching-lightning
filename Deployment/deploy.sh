@@ -111,7 +111,13 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
            ssh -n $target "sudo apt-get update && sudo apt-get install -y automake git libgmp-dev libsqlite3-dev python python3 net-tools zlib1g-dev libbase58-dev jq"
 		   ssh -n $target "wget \"https://download.libsodium.org/libsodium/releases/LATEST.tar.gz\" && tar -xvf ./LATEST.tar.gz && cd libsodium-stable && ./configure && make && make check && sudo make install"
            echo "Clone lightning from repository"
-           ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure --enable-developer && make && sudo make install"
+		   # Change done by Nachiket Tapas
+		   #code for regtest only
+		   if [ "$bitcoinNetwork" = "regtest" ]; then
+		       ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure && make && sudo make install"
+		   else
+               ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure --enable-developer && make && sudo make install"
+		   fi
            echo "Start clone patching-lightning"
            ssh -n $target "git clone https://github.com/nachikettapas/patching-lightning.git"
            echo "Start install packages"
@@ -153,7 +159,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 				   sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 				   sleep 30
-				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
+				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
 			   fi
 			   # ------------------------------
                echo "Start lightning channel setup"
@@ -167,7 +173,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 			       sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 				   sleep 30
-				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
+				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
 			   fi
 			   # ------------------------------
                vendorIp_=$(jq '.vendorIp' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
@@ -191,7 +197,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 			       sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 				   sleep 30
-				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
+				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
 			   fi
 			   # ------------------------------
 			   ssh -n $target "sleep 5 && pkill lightning && node /home/$user/patching-lightning/Utils/generateAddress.js --hsmSecretPath=/home/$user/.lightning/$bitcoinNetwork/hsm_secret --configFilePath=/home/$user/patching-lightning/Vendor/Vendor_config.json && sudo rm -r ~/.lightning/" 
@@ -202,7 +208,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 			       sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 				   sleep 30
-				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
+				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
 			   fi
 			   # ------------------------------
            fi
