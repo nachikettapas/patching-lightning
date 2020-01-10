@@ -25,6 +25,8 @@ async function generateIoTConfig () {
     let privateKey = data.toString()
     if(privateKey.length === 63)
       privateKey = '0' + privateKey
+	if(privateKey.length === 62)
+      privateKey = '00' + privateKey
     console.log('private key = ', privateKey)
     const keyPair = bitcoin.ECPair.fromPrivateKey(Buffer.from(privateKey, 'hex'))
     let publicKey = keyPair.publicKey
