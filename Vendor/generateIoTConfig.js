@@ -39,7 +39,7 @@ async function generateIoTConfig () {
       username: rpcUserName,
       password: rpcPassword,
       host: host,
-	  port: rpcPort
+	  port: port
     })
 	
     const testnet = bitcoin.networks.testnet
