@@ -160,6 +160,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 				   sleep 30
                    address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
+				   ssh -n $target "bitcoin-cli sendtoaddress $address 100"
 				   sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 				   sleep 30
@@ -176,6 +177,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 				   sleep 30
                    address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
+				   ssh -n $target "bitcoin-cli sendtoaddress $address 100"
 			       sleep 30
 			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 				   sleep 30
@@ -364,6 +366,7 @@ elif [ "$RUN" = "1" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 				   sleep 30
                    address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
+				   ssh -n $target "bitcoin-cli sendtoaddress $address 100"
 			       sleep 30
 				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 				   sleep 30
@@ -385,6 +388,7 @@ elif [ "$RUN" = "1" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 				   sleep 30
                    address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
+				   ssh -n $target "bitcoin-cli sendtoaddress $address 100"
 			       sleep 30
 				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 				   sleep 30
@@ -419,6 +423,7 @@ elif [ "$RUN" = "1" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 				   sleep 30
                    address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
+				   ssh -n $target "bitcoin-cli sendtoaddress $address 100"
 			       sleep 30
 				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 				   sleep 30
@@ -440,6 +445,7 @@ elif [ "$RUN" = "1" ]; then
 		       if [ "$bitcoinNetwork" = "regtest" ]; then
 				   sleep 30
                    address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
+				   ssh -n $target "bitcoin-cli sendtoaddress $address 100"
 			       sleep 30
 				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
 				   sleep 30
