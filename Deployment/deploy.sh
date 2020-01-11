@@ -43,14 +43,6 @@ function init(){
   ip="$(cut -d'|' -f1 <<<"$1")"
   user="$(cut -d'|' -f2 <<<"$1")"
   bitcoinNetwork=$(jq -r '.bitcoinNetwork' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
-  # Change done by Nachiket Tapas
-  #code for regtest only
-  if [ "$bitcoinNetwork" = "regtest" ]; then
-	lightningHubNodeId=$(jq '.lightningHubNodeID' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
-	host=$(jq '.host' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
-	lightningPort=$(jq '.lightningPort' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
-  fi
-  # ------------------------------
   echo IP: $ip, user: $user
 }
 
@@ -117,7 +109,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
            ssh -n $target "sudo apt-get install -y build-essential libtool autotools-dev autoconf libssl-dev libboost-all-dev && sudo add-apt-repository ppa:bitcoin/bitcoin && sudo apt-get update && sudo apt-get -y install bitcoind && mkdir ~/.bitcoin/ && cd ~/.bitcoin/"
            echo "start install dependency for lightning"
            ssh -n $target "sudo apt-get update && sudo apt-get install -y automake git libgmp-dev libsqlite3-dev python python3 net-tools zlib1g-dev libbase58-dev jq"
-		   ssh -n $target "wget \"https://download.libsodium.org/libsodium/releases/LATEST.tar.gz\" && tar -xvf ./LATEST.tar.gz && cd libsodium-stable && ./configure && make && make check && sudo make install"
+		   ssh -n $target "curl -o LATEST.tar.gz \"https://download.libsodium.org/libsodium/releases/LATEST.tar.gz\" && tar -xvf ./LATEST.tar.gz && cd libsodium-stable && ./configure && make && make check && sudo make install"
            echo "Clone lightning from repository"
 		   # Change done by Nachiket Tapas
 		   #code for regtest only
@@ -139,51 +131,15 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
            #get lightning configuration
            if [ "$IOT" = "1" ]; then
                echo "Create IoT config and create new lightning wallet"
-               ssh -n $targetVendor "while true ; do if pgrep -x lightningd > /dev/null; then pkill lightning && echo \"lightning process is killed\" && break; else echo \"wait to lightning process\" && sleep 2 ; fi; done && chmod 777 ~/.lightning/$bitcoinNetwork/hsm_secret && cd ~/.lightning && ssh -n $target \"if [ -e \"/home/$user/.lightning\" ]; then sudo rm -r /home/$user/.lightning ; fi && mkdir .lightning/$bitcoinNetwork\" && scp ~/.lightning/$bitcoinNetwork/hsm_secret $target:~/.lightning/$bitcoinNetwork/ && pwd && node /home/$vendorUser/patching-lightning/Vendor/generateIoTConfig.js --hsmSecretPath=/home/$vendorUser/.lightning/$bitcoinNetwork/hsm_secret && scp ~/patching-lightning/Vendor/IoT_config.json $target:~/patching-lightning/IoT/ &&  sudo rm -r ~/.lightning/"
+               ssh -n $targetVendor "while true ; do if pgrep -x lightningd > /dev/null; then pkill lightning && echo \"lightning process is killed\" && break; else echo \"wait to lightning process\" && sleep 2 ; fi; done && chmod 777 ~/.lightning/$bitcoinNetwork/hsm_secret && cd ~/.lightning && ssh -n $target \"if [ -e \"/home/$user/.lightning\" ]; then sudo rm -r /home/$user/.lightning ; fi && mkdir -p .lightning/$bitcoinNetwork\" && scp ~/.lightning/$bitcoinNetwork/hsm_secret $target:~/.lightning/$bitcoinNetwork/ && pwd && node /home/$vendorUser/patching-lightning/Vendor/generateIoTConfig.js --hsmSecretPath=/home/$vendorUser/.lightning/$bitcoinNetwork/hsm_secret && scp ~/patching-lightning/Vendor/IoT_config.json $target:~/patching-lightning/IoT/ &&  sudo rm -r ~/.lightning/"
 			   ssh -n $targetVendor "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
-			   # Change done by Nachiket Tapas
-			   #code for regtest only
-		       if [ "$bitcoinNetwork" = "regtest" ]; then
-				   sleep 30
-                   address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
-                   ssh -n $targetVendor "bitcoin-cli sendtoaddress $address 100"
-				   sleep 30
-			       ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
-				   sleep 30
-				   ssh -n $targetVendor "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
-			   fi   
-			   # ------------------------------
                echo "Start lightning"
                ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
-			   # Change done by Nachiket Tapas
-		       #code for regtest only
-		       if [ "$bitcoinNetwork" = "regtest" ]; then
-				   sleep 30
-                   address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
-				   ssh -n $target "bitcoin-cli sendtoaddress $address 100"
-				   sleep 30
-			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
-				   sleep 30
-				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
-			   fi
-			   # ------------------------------
                echo "Start lightning channel setup"
                ssh -n $target "cd ~/patching-lightning/Deployment/ ; node Setup.js --type=iot >> setupLog.log 2>&1 &"
            elif [ "$DISTRIBUTOR" = "1" ]; then
                now=$(date)
                ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
-			   # Change done by Nachiket Tapas
-		       #code for regtest only
-		       if [ "$bitcoinNetwork" = "regtest" ]; then
-				   sleep 30
-                   address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
-				   ssh -n $target "bitcoin-cli sendtoaddress $address 100"
-			       sleep 30
-			       ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
-				   sleep 30
-				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
-			   fi
-			   # ------------------------------
                vendorIp_=$(jq '.vendorIp' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
                vendorPort=$(jq '.vendorPort' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
                lightningHubNodeId=$(jq '.lightningHubNodeID' /home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json)
@@ -201,18 +157,6 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
                ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
                ssh -n $target "sleep 5 && pkill lightning && node /home/$user/patching-lightning/Utils/generateAddress.js --hsmSecretPath=/home/$user/.lightning/$bitcoinNetwork/hsm_secret --configFilePath=/home/$user/patching-lightning/Vendor/Vendor_config.json && sudo rm -r ~/.lightning/"
                ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
-               # Change done by Nachiket Tapas
-               #code for regtest only
-               if [ "$bitcoinNetwork" = "regtest" ]; then
-                   sleep 30
-                   address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
-                   ssh -n $target "bitcoin-cli sendtoaddress $address 100"
-                   sleep 30
-                   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
-                   sleep 30
-                   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
-               fi
-               # ------------------------------
            fi
 
            echo "End of installation $ip"
@@ -363,15 +307,6 @@ elif [ "$RUN" = "1" ]; then
                ssh -n $target "pkill node"
                ssh -n $target "pkill lightning"
                ssh -n $target "if pgrep -x lightningd > /dev/null; then cd ~/patching-lightning/Distributor/ && pkill node ; else pkill node ; nohup ~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon > runLightningLog.log 2>&1 & fi"
-		       if [ "$bitcoinNetwork" = "regtest" ]; then
-				   sleep 30
-                   address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
-				   ssh -n $target "bitcoin-cli sendtoaddress $address 100"
-			       sleep 30
-				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
-				   sleep 30
-				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
-			   fi
                ssh -n $target "cd /home/$user/patching-lightning/Distributor/ && sleep 2 && export DEBUG=bittorrent-extension,distributor,bittorrent-protocol,LightningClient; nohup node index.js > runDistLog.log 2>&1 &"
              done <"$CONF_DISTRIBUTOR"
 
@@ -385,15 +320,6 @@ elif [ "$RUN" = "1" ]; then
                ssh -n $target "pkill node"
                ssh -n $target "pkill lightning"
                ssh -n $target "if pgrep -x lightningd > /dev/null; then cd ~/patching-lightning/IoT/ && pkill node ; else nohup ~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon > runLightningLog.log 2>&1 & fi"
-		       if [ "$bitcoinNetwork" = "regtest" ]; then
-				   sleep 30
-                   address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
-				   ssh -n $target "bitcoin-cli sendtoaddress $address 100"
-			       sleep 30
-				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
-				   sleep 30
-				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
-			   fi
                ssh -n $target "cd /home/$user/patching-lightning/IoT/ && sleep 2 && export DEBUG=bittorrent-extension,iot,bittorrent-protocol,LightningClient,lightning-client; nohup node index.js > runIotLog.log 2>&1 &"
 
               done <"$CONF_IOT"
@@ -420,15 +346,6 @@ elif [ "$RUN" = "1" ]; then
                ssh -n $target "pkill node"
                ssh -n $target "pkill lightning"
                ssh -n $target "if pgrep -x lightningd > /dev/null; then cd ~/patching-lightning/Distributor/ && pkill node ; else nohup ~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon > runLightningLog.log 2>&1 & fi"
-		       if [ "$bitcoinNetwork" = "regtest" ]; then
-				   sleep 30
-                   address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
-				   ssh -n $target "bitcoin-cli sendtoaddress $address 100"
-			       sleep 30
-				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
-				   sleep 30
-				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
-			   fi
                ssh -n $target "cd /home/$user/patching-lightning/Distributor/ && sleep 2 &&  export DEBUG=bittorrent-extension,distributor,bittorrent-protocol,LightningClient,webt ; nohup node index.js > runDistLog.log 2>&1 &"
              done <"$CONF_DISTRIBUTOR"
 
@@ -442,15 +359,6 @@ elif [ "$RUN" = "1" ]; then
                ssh -n $target "pkill node"
                ssh -n $target "pkill lightning"
                ssh -n $target "if pgrep -x lightningd > /dev/null; then cd ~/patching-lightning/IoT/ && pkill node ; else nohup ~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon > runLightningLog.log 2>&1 & fi"
-		       if [ "$bitcoinNetwork" = "regtest" ]; then
-				   sleep 30
-                   address=$(ssh -o StrictHostKeyChecking=no $target 'address=$(~/lightning/cli/lightning-cli --network=regtest newaddr p2sh-segwit | jq .address); echo $address')
-				   ssh -n $target "bitcoin-cli sendtoaddress $address 100"
-			       sleep 30
-				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork connect $lightningHubNodeId@$host:$lightningPort"
-				   sleep 30
-				   ssh -n $target "~/lightning/cli/lightning-cli --network=$bitcoinNetwork fundchannel $lightningHubNodeId 1000000"
-			   fi
                ssh -n $target "cd /home/$user/patching-lightning/IoT/ && sleep 2 && export DEBUG=bittorrent-extension,iot,bittorrent-protocol,LightningClient ; nohup node index.js > runIotLog.log 2>&1 &"
              done <"$CONF_IOT"
     fi
