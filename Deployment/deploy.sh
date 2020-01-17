@@ -14,8 +14,8 @@
 # Then copy the public key to the target server
 # ssh-copy-id user@server (e.g. user@10.0.1.2)
 
-USER="deployment"
-SERVERUSER="deployment"
+USER="ubuntu"
+SERVERUSER="ubuntu"
 BRANCH="develop"
 LIGHTNINGDIRECTORY="~/patching-lightning/"
 CONFIG=""
@@ -105,6 +105,8 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
            ssh -n $target "curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - && sudo apt-get install -y nodejs"
            bitcoinSource="/home/$SERVERUSER/patching-lightning/Deployment/bitcoin.conf"
            bitcoinTarget="$user@$ip:/home/$user/.bitcoin/"
+		   lightningSource="/home/$SERVERUSER/patching-lightning/Deployment/config"
+           lightningTarget="$user@$ip:/home/$user/.lightning/"
            echo "start install bitcoind"
            ssh -n $target "sudo apt-get install -y build-essential libtool autotools-dev autoconf libssl-dev libboost-all-dev && sudo add-apt-repository ppa:bitcoin/bitcoin && sudo apt-get update && sudo apt-get -y install bitcoind && mkdir ~/.bitcoin/ && cd ~/.bitcoin/"
            echo "start install dependency for lightning"
@@ -114,9 +116,9 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 		   # Change done by Nachiket Tapas
 		   #code for regtest only
 		   if [ "$bitcoinNetwork" = "regtest" ]; then
-		       ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure && make && sudo make install"
+		       ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure && make && sudo make install && mkdir -p ~/.lightning"
 		   else
-               ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure --enable-developer && make && sudo make install"
+               ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure --enable-developer && make && sudo make install && mkdir -p ~/.lightning"
 		   fi
            echo "Start clone patching-lightning"
            ssh -n $target "git clone https://github.com/nachikettapas/patching-lightning.git"
