@@ -110,7 +110,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
            echo "start install bitcoind"
            ssh -n $target "sudo apt-get install -y build-essential libtool autotools-dev autoconf libssl-dev libboost-all-dev && sudo add-apt-repository ppa:bitcoin/bitcoin && sudo apt-get update && sudo apt-get -y install bitcoind && mkdir ~/.bitcoin/ && cd ~/.bitcoin/"
            echo "start install dependency for lightning"
-           ssh -n $target "sudo apt-get update && sudo apt-get install -y automake git libgmp-dev libsqlite3-dev python python3 net-tools zlib1g-dev libbase58-dev jq python3-mako gettext"
+           ssh -n $target "sudo apt-get update && sudo apt-get install -y autoconf automake build-essential git libtool libgmp-dev libsqlite3-dev python python3 net-tools zlib1g-dev libbase58-dev jq python3-mako gettext"
 		   ssh -n $target "curl -o LATEST.tar.gz \"https://download.libsodium.org/libsodium/releases/LATEST.tar.gz\" && tar -xvf ./LATEST.tar.gz && cd libsodium-stable && ./configure && make && make check && sudo make install"
            echo "Clone lightning from repository"
 		   # Change done by Nachiket Tapas
