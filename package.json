@@ -23,6 +23,7 @@
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1",
     "standard": "^12.0.1",
-    "webtorrent": "git+https://github.com/david-oz/webtorrent.git"
+    "webtorrent": "git+https://github.com/david-oz/webtorrent.git",
+	"webtorrent-cli": "^3.0.0"
   }
 }
