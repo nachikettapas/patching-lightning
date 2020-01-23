@@ -100,10 +100,30 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
            initVendor
            target="$user@$ip"
            targetVendor="$vendorUser@$vendorIP"
+           echo "start install nodejs"
+           ssh -n $target "sudo apt-get update && sudo apt install -y curl"
+           ssh -n $target "curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - && sudo apt-get install -y nodejs"
            bitcoinSource="/home/$SERVERUSER/patching-lightning/Deployment/bitcoin.conf"
            bitcoinTarget="$user@$ip:/home/$user/.bitcoin/"
 		   lightningSource="/home/$SERVERUSER/patching-lightning/Deployment/config"
            lightningTarget="$user@$ip:/home/$user/.lightning/"
+           echo "start install bitcoind"
+           ssh -n $target "sudo apt-get install -y build-essential libtool autotools-dev autoconf libssl-dev libboost-all-dev && sudo add-apt-repository ppa:bitcoin/bitcoin && sudo apt-get update && sudo apt-get -y install bitcoind && mkdir ~/.bitcoin/ && cd ~/.bitcoin/"
+           echo "start install dependency for lightning"
+           ssh -n $target "sudo apt-get update && sudo apt-get install -y autoconf automake build-essential git libtool libgmp-dev libsqlite3-dev python python3 net-tools zlib1g-dev libbase58-dev jq python3-mako gettext"
+		   ssh -n $target "curl -o LATEST.tar.gz \"https://download.libsodium.org/libsodium/releases/LATEST.tar.gz\" && tar -xvf ./LATEST.tar.gz && cd libsodium-stable && ./configure && make && make check && sudo make install"
+           echo "Clone lightning from repository"
+		   # Change done by Nachiket Tapas
+		   #code for regtest only
+		   if [ "$bitcoinNetwork" = "regtest" ]; then
+		       ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure && make && sudo make install && mkdir -p ~/.lightning"
+		   else
+               ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure --enable-developer && make && sudo make install && mkdir -p ~/.lightning"
+		   fi
+           echo "Start clone patching-lightning"
+           ssh -n $target "git clone https://github.com/nachikettapas/patching-lightning.git"
+           echo "Start install packages"
+           ssh -n $target "cd ~/patching-lightning/ && npm install && cd node_modules/webtorrent/ && sudo rm -r node_modules/ && npm install && cd /home/$user/ && export LC_ALL=C && sudo apt install -y python3-pip && cd ~/patching-lightning/Utils/AddressGeneration/ && sudo pip3 install -r requirements.txt"
            echo "start copy bitcoind config file"
            scp -r $bitcoinSource $bitcoinTarget
 		   deploymentSource="/home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json"
