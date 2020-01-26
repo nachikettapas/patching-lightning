@@ -21,7 +21,8 @@ const colors = require('colors')
 function Distributor (configFilePath) {
   let self = this
   this.configFilePath = configFilePath
-  this.webtorrentClient = new WebTorrent()
+  const dhtPort = utils.getJsonAttribute(configFilePath, 'dhtPort')
+  this.webtorrentClient = new WebTorrent({dhtPort: dhtPort})
   /* This change is done by Nachiket Tapas */
   this.lightningClient = new DistributorLightningClient(homedir + '/.lightning/' + bitcoinNetwork)
   this.vendorIp = utils.getJsonAttribute(configFilePath, 'vendorIp')

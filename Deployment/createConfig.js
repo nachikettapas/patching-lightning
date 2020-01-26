@@ -19,49 +19,53 @@ createConfig.createConfig = function () {
       {name: 'lightningHubNodeId', type: String},
       {name: 'vendorPubKey', type: String},
       {name: 'vendorIp', type: String}
+      {name: 'dhtPort', type: String},
     ]
     const options = commandLineArgs(optionDef)
 
     switch (options.type) {
       case 'Vendor':
-        createConfig.createVendorConfig(options.vendorPort)
+        createConfig.createVendorConfig(options.vendorPort, options.dhtPort)
         break
       case 'Distributor':
-        createConfig.createDistributorConfig(options.lightningHubNodeId, options.vendorIp, options.vendorPort, options.vendorPubKey)
+        createConfig.createDistributorConfig(options.lightningHubNodeId, options.vendorIp, options.vendorPort, options.vendorPubKey, options.dhtPort)
         break
       case 'IoT':
-        createConfig.createIoTConfig(options.vendorIp, options.vendorPort, options.vendorPubKey, options.sk, options.publicKey)
+        createConfig.createIoTConfig(options.vendorIp, options.vendorPort, options.vendorPubKey, options.sk, options.publicKey, options.dhtPort)
         break
     }
   }
 }
 
-createConfig.createVendorConfig = function (vendorPort) {
+createConfig.createVendorConfig = function (vendorPort, dhtPort) {
   let vendorConfig = {
     vendorPort: vendorPort,
+    dhtPort: dhtPort,
     iotPublicKeys: []
   }
   createConfig.writeConfigFile(vendorConfig, homedir + '/patching-lightning/Vendor/Vendor_config.json')
 }
 
-createConfig.createDistributorConfig = function (lightningHubNodeId, vendorIp, vendorPort, vendorPubKey) {
+createConfig.createDistributorConfig = function (lightningHubNodeId, vendorIp, vendorPort, vendorPubKey, dhtPort) {
   let distConfig = {
     lightningHubNodeId: lightningHubNodeId,
     vendorIp: vendorIp,
     vendorPort: vendorPort,
     vendorPublicKey: vendorPubKey,
+    dhtPort: dhtPort
   }
   createConfig.writeConfigFile(distConfig, homedir + '/patching-lightning/Distributor/Distributor_config.json')
 }
 
-createConfig.createIoTConfig = function (vendorIp, vendorPort, vendorPubKey, txid, sk, publicKey, configFilePath) {
+createConfig.createIoTConfig = function (vendorIp, vendorPort, vendorPubKey, txid, sk, publicKey, configFilePath, dhtPort) {
   let iotConfig = {
     vendorIp: vendorIp,
     vendorPort: vendorPort,
     vendorPublicKey: vendorPubKey,
     txid: txid,
     sk: sk,
-    publicKey: publicKey
+    publicKey: publicKey,
+    dhtPort: dhtPort
   }
   createConfig.writeConfigFile(iotConfig, configFilePath)
 }

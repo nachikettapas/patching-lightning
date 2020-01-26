@@ -14,6 +14,7 @@
 # Then copy the public key to the target server
 # ssh-copy-id user@server (e.g. user@10.0.1.2)
 
+DHTPORT="9191"
 USER="ubuntu"
 SERVERUSER="ubuntu"
 BRANCH="develop"
@@ -105,36 +106,37 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
            ssh -n $target "curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - && sudo apt-get install -y nodejs"
            bitcoinSource="/home/$SERVERUSER/patching-lightning/Deployment/bitcoin.conf"
            bitcoinTarget="$user@$ip:/home/$user/.bitcoin/"
-		   lightningSource="/home/$SERVERUSER/patching-lightning/Deployment/config"
+	   lightningSource="/home/$SERVERUSER/patching-lightning/Deployment/config"
            lightningTarget="$user@$ip:/home/$user/.lightning/"
            echo "start install bitcoind"
            ssh -n $target "sudo apt-get install -y build-essential libtool autotools-dev autoconf libssl-dev libboost-all-dev && sudo add-apt-repository ppa:bitcoin/bitcoin && sudo apt-get update && sudo apt-get -y install bitcoind && mkdir ~/.bitcoin/ && cd ~/.bitcoin/"
            echo "start install dependency for lightning"
            ssh -n $target "sudo apt-get update && sudo apt-get install -y autoconf automake build-essential git libtool libgmp-dev libsqlite3-dev python python3 net-tools zlib1g-dev libbase58-dev jq python3-mako gettext"
-		   ssh -n $target "curl -o LATEST.tar.gz \"https://download.libsodium.org/libsodium/releases/LATEST.tar.gz\" && tar -xvf ./LATEST.tar.gz && cd libsodium-stable && ./configure && make && make check && sudo make install"
+	   ssh -n $target "curl -o LATEST.tar.gz \"https://download.libsodium.org/libsodium/releases/LATEST.tar.gz\" && tar -xvf ./LATEST.tar.gz && cd libsodium-stable && ./configure && make && make check && sudo make install"
            echo "Clone lightning from repository"
-		   # Change done by Nachiket Tapas
-		   #code for regtest only
-		   if [ "$bitcoinNetwork" = "regtest" ]; then
-		       ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure && make && sudo make install && mkdir -p ~/.lightning"
-		   else
+	   # Change done by Nachiket Tapas
+	   #code for regtest only
+	   if [ "$bitcoinNetwork" = "regtest" ]; then
+	       ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure && make && sudo make install && mkdir -p ~/.lightning"
+	   else
                ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure --enable-developer && make && sudo make install && mkdir -p ~/.lightning"
-		   fi
+	   fi
            echo "Start clone patching-lightning"
            ssh -n $target "git clone https://github.com/nachikettapas/patching-lightning.git"
            echo "Start install packages"
            ssh -n $target "cd ~/patching-lightning/ && npm install && cd node_modules/webtorrent/ && sudo rm -r node_modules/ && npm install && cd /home/$user/ && export LC_ALL=C && sudo apt install -y python3-pip && cd ~/patching-lightning/Utils/AddressGeneration/ && sudo pip3 install -r requirements.txt"
            echo "start copy bitcoind config file"
            scp -r $bitcoinSource $bitcoinTarget
-		   deploymentSource="/home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json"
-		   deploymentTarget="$user@$ip:/home/$user/patching-lightning/Deployment/"
-		   scp -r $deploymentSource $deploymentTarget  
+	   deploymentSource="/home/$SERVERUSER/patching-lightning/Deployment/Deployment_config.json"
+	   deploymentTarget="$user@$ip:/home/$user/patching-lightning/Deployment/"
+	   scp -r $deploymentSource $deploymentTarget  
+	   scp -r $lightningSource $lightningTarget  
 		   		   
            #get lightning configuration
            if [ "$IOT" = "1" ]; then
                echo "Create IoT config and create new lightning wallet"
                ssh -n $targetVendor "while true ; do if pgrep -x lightningd > /dev/null; then pkill lightning && echo \"lightning process is killed\" && break; else echo \"wait to lightning process\" && sleep 2 ; fi; done && chmod 777 ~/.lightning/$bitcoinNetwork/hsm_secret && cd ~/.lightning && ssh -n $target \"if [ -e \"/home/$user/.lightning\" ]; then sudo rm -r /home/$user/.lightning ; fi && mkdir -p .lightning/$bitcoinNetwork\" && scp ~/.lightning/$bitcoinNetwork/hsm_secret $target:~/.lightning/$bitcoinNetwork/ && pwd && node /home/$vendorUser/patching-lightning/Vendor/generateIoTConfig.js --hsmSecretPath=/home/$vendorUser/.lightning/$bitcoinNetwork/hsm_secret && scp ~/patching-lightning/Vendor/IoT_config.json $target:~/patching-lightning/IoT/ &&  sudo rm -r ~/.lightning/"
-			   ssh -n $targetVendor "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
+	       ssh -n $targetVendor "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
                echo "Start lightning"
                ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
                echo "Start lightning channel setup"
@@ -148,14 +150,14 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
                echo "vendor Ip $targetVendor"
                vendorPubKey=$(ssh -n $targetVendor "jq '.publicKey' ~/patching-lightning/Vendor/Vendor_config.json")
                echo "vendorIp=$vendorIp_, vendorPort=$vendorPort, lightningHubNodeId=$lightningHubNodeId, vendorPubKey=$vendorPubKey"
-               ssh -n $target "node /home/$user/patching-lightning/Deployment/createConfig.js --type=Distributor --vendorIp=$vendorIp_ --vendorPort=$vendorPort --vendorPubKey=$vendorPubKey --lightningHubNodeId=$lightningHubNodeId"
+               ssh -n $target "node /home/$user/patching-lightning/Deployment/createConfig.js --type=Distributor --vendorIp=$vendorIp_ --vendorPort=$vendorPort --vendorPubKey=$vendorPubKey --lightningHubNodeId=$lightningHubNodeId --dhtPort=$DHTPORT"
                invoice=$(~/lightning/cli/lightning-cli invoice 5000000 "$target$now" hello 28800|\jq '.bolt11')
                ssh -n $target "node /home/$user/patching-lightning/Utils/generateAddress.js --hsmSecretPath=/home/$user/.lightning/$bitcoinNetwork/hsm_secret --configFilePath=/home/$user/patching-lightning/Distributor/Distributor_config.json"
                echo "Start lightning channel setup"
                ssh -n $target "cd ~/patching-lightning/Deployment/ ; node Setup.js --type=distributor --invoice=$invoice >> setupLog.log 2>&1 &"
            elif [ "$VENDOR" = "1" ]; then
                echo "Start lightning channel setup"
-               ssh -n $target "node /home/$user/patching-lightning/Deployment/createConfig.js --type=Vendor --vendorPort=8080"
+               ssh -n $target "node /home/$user/patching-lightning/Deployment/createConfig.js --type=Vendor --vendorPort=8080 --dhtPort=$DHTPORT"
                ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
                ssh -n $target "sleep 5 && pkill lightning && node /home/$user/patching-lightning/Utils/generateAddress.js --hsmSecretPath=/home/$user/.lightning/$bitcoinNetwork/hsm_secret --configFilePath=/home/$user/patching-lightning/Vendor/Vendor_config.json && sudo rm -r ~/.lightning/"
                ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"

@@ -24,7 +24,8 @@ function Vendor (configFilePath) {
   this.configFilePath = configFilePath
   this.lastTorrentInfoHash = null
   this.lastFileHashSHA256 = null
-  this.webtorrentClient = new WebTorrent()
+  const dhtPort = utils.getJsonAttribute(configFilePath, 'dhtPort')
+  this.webtorrentClient = new WebTorrent({dhtPort: dhtPort})
   this.restApp = express()
   this.server = http.createServer(this.restApp)
   this.socketIOServer = require('socket.io')(this.server)

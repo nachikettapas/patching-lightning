@@ -61,7 +61,7 @@ async function generateIoTConfig () {
     }
 
     createConfig.createIoTConfig(getOwnLanIp(), utils.getJsonAttribute(homedir+"/patching-lightning/Vendor/" + configFilePath, 'vendorPort'),
-      utils.getJsonAttribute(homedir+"/patching-lightning/Vendor/" + configFilePath, 'publicKey'), txid, privateKey, publicKey.toString('hex'), homedir+'/patching-lightning/Vendor/IoT_config.json')
+      utils.getJsonAttribute(homedir+"/patching-lightning/Vendor/" + configFilePath, 'publicKey'), txid, privateKey, publicKey.toString('hex'), homedir+'/patching-lightning/Vendor/IoT_config.json', utils.getJsonAttribute(homedir+"/patching-lightning/Vendor/" + configFilePath, 'dhtPort'))
 
   })
 }
