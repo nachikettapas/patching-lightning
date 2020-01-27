@@ -18,8 +18,8 @@ createConfig.createConfig = function () {
       {name: 'vendorPort', type: String},
       {name: 'lightningHubNodeId', type: String},
       {name: 'vendorPubKey', type: String},
-      {name: 'vendorIp', type: String}
-      {name: 'dhtPort', type: String},
+      {name: 'vendorIp', type: String},
+      {name: 'dhtPort', type: String}
     ]
     const options = commandLineArgs(optionDef)
 
