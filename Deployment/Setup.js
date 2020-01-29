@@ -24,7 +24,8 @@ async function setup () {
   let lightningAddr = ''
   let tx = ''
   let txData = ''
-  const amountForChannel = '0.001'
+  //const amountForChannel = '0.001'
+  const amountForChannel = '1'
   const lightningNodeID = await clientLightning.getNodeId()
 
   const optionDef = [
