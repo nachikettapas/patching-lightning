@@ -73,7 +73,7 @@ async function setup () {
             bitcoinConfirm = true
             try {
               if (bitcoinConfirm === true) {
-                lightningTxConfirm = await clientLightning.connectToChannel(lightningHubNodeID,lightningHost,lightningPort,100000000)
+                lightningTxConfirm = await clientLightning.connectToChannel(lightningHubNodeID,lightningHost,lightningPort,16777215)
                 console.log('Lightning connection to channel output:', lightningTxConfirm)
               }
             }catch (err){
