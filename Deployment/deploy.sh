@@ -117,7 +117,7 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
 	   # Change done by Nachiket Tapas
 	   #code for regtest only
 	   if [ "$bitcoinNetwork" = "regtest" ]; then
-	       ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && git checkout v0.8.0 && ./configure && make && sudo make install && mkdir -p ~/.lightning"
+	       ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure && make && sudo make install && mkdir -p ~/.lightning"
 	   else
                ssh -n $target "git clone https://github.com/ElementsProject/lightning.git && cd lightning && ./configure --enable-developer && make && sudo make install && mkdir -p ~/.lightning"
 	   fi
