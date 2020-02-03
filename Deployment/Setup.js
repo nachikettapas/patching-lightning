@@ -24,7 +24,7 @@ async function setup () {
   let lightningAddr = ''
   let tx = ''
   let txData = ''
-  const amountForChannel = '0.001'
+  const amountForChannel = '0.05'
   const lightningNodeID = await clientLightning.getNodeId()
 
   const optionDef = [
@@ -72,7 +72,7 @@ async function setup () {
             bitcoinConfirm = true
             try {
               if (bitcoinConfirm === true) {
-                lightningTxConfirm = await clientLightning.connectToChannel(lightningHubNodeID,lightningHost,lightningPort,10000)
+                lightningTxConfirm = await clientLightning.connectToChannel(lightningHubNodeID,lightningHost,lightningPort,1000000)
                 console.log('Lightning connection to channel output:', lightningTxConfirm)
               }
             }catch (err){
