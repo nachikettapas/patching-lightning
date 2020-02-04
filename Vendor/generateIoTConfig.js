@@ -48,7 +48,7 @@ async function generateIoTConfig () {
     const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: testnet })
     const address = bitcoin.payments.p2sh({ redeem: p2wpkh, network: testnet }).address
     console.log('address = ', address)
-    let txid = await bitcoinClient.sendToAddress(address, '0.01')
+    let txid = await bitcoinClient.sendToAddress(address, '0.05')
     if (!txid) {
       console.log('can not fund iot pubKey = ', publicKey)
       return
