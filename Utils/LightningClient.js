@@ -138,17 +138,20 @@ LightningClient.prototype.requestPayment = async function (nodeID, hubNodeId, am
  */
 LightningClient.prototype.pay = async function (invoice) {
   let res
-  try {
-    res = await this.clientLightning.pay(invoice)
-	return res
-  } catch (err) {
-    if (err.error.code !== 203) {
-	  debug('err = %o', err)
-	}
-	if (err.error.code === 205) {
-	  debug('Could not find a route')
-	  res = 205
-	}
+  while (true) {
+    try {
+      res = await this.clientLightning.pay(invoice)
+	  return res
+    } catch (err) {
+      if (err.error.code !== 203) {
+	    debug('err = %o', err)
+	  }
+	  if (err.error.code === 205) {
+	    debug('Could not find a route')
+	    res = 205
+		break
+	  }
+    }
   }
 }
 

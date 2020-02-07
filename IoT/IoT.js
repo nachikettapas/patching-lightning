@@ -148,7 +148,7 @@ IoT.prototype.decodeAndPay = async function (wire, data) {
     }
     let paymentReceipt
     console.log(colors.yellow(`IoT: paying for piece ${pieceIndex}, for node ${distributorNodeId.substring(0, 8)}`))
-    paymentReceipt = await this.lightningClient.pay(bolt11)
+	paymentReceipt = await this.lightningClient.pay(bolt11)
     debug('payment receipt for piece = %s from peerId = %s is %o', pieceIndex, distributorPeerId, paymentReceipt)
     if (paymentReceipt !== 205) {
       this.piecesRecords[pieceIndex].paid = true
