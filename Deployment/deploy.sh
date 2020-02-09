@@ -143,6 +143,12 @@ if [ "$NEW_INSTALL" = "1" ] && [ "$RBP" = "0" ]; then
                ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
                echo "Start lightning channel setup"
                ssh -n $target "cd ~/patching-lightning/Deployment/ ; node Setup.js --type=iot >> setupLog.log 2>&1 &"
+			   sleep 5m
+			   ssh -n $target "pkill node"
+               ssh -n $target "pkill lightning"
+			   ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
+               echo "Start lightning channel setup"
+               ssh -n $target "cd ~/patching-lightning/Deployment/ ; node Setup.js --type=iot >> setupLog.log 2>&1 &"
            elif [ "$DISTRIBUTOR" = "1" ]; then
                now=$(date)
                ssh -n $target "~/lightning/lightningd/lightningd --network=$bitcoinNetwork --log-level=debug --daemon >> runLog.log 2>&1 &"
