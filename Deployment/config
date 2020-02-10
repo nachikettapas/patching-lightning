@@ -1,7 +1,6 @@
-bitcoin-rpcconnect=192.168.2.29
+network=regtest
+log-level=debug
+log-file=/home/ubuntu/lightningProcessLog.log
+addr=0.0.0.0:9735
 bitcoin-rpcuser=ubuntu
 bitcoin-rpcpassword=ubuntu
-alias=testnet
-network=testnet
-log-level=debug
-addr=0.0.0.0:9735
